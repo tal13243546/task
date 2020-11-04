@@ -1,22 +1,25 @@
 package com.app.task.tests;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import com.app.task.bean.Employee;
+import com.app.task.bean.EmployeeList;
 import com.app.task.bean.Job;
 import com.app.task.service.CompanyService;
 import com.app.task.utils.ArtUtils;
 
 @Component
-@Lazy
 public class Test implements CommandLineRunner{
 	@Autowired
 	private CompanyService company; 
+	@Autowired
+	private RestTemplate restTemplate;
 	
 	@Override
 	public void run(String... args) throws Exception {
@@ -35,28 +38,36 @@ public class Test implements CommandLineRunner{
 		e2.getJobs().add(j4);
 		
 		System.out.println("-------------------------Add Employee---------------------------");
-		company.addEmployee(e1);
-		company.addEmployee(e2);
+		System.out.println(restTemplate.postForEntity("http://localhost:8080/company/addEmp", e1, Long.class));
+		System.out.println(restTemplate.postForEntity("http://localhost:8080/company/addEmp", e2, Long.class));
+//		company.addEmployee(e1);
+//		company.addEmployee(e2);
 		System.out.println();
-		System.out.println(company.getAllEmployees() + "\n");
+		System.out.println(restTemplate.getForObject("http://localhost:8080/company/getEmp", List.class));
+//		System.out.println(company.getAllEmployees() + "\n");
 		System.out.println("-------------------------Get Employee By ID(1)---------------------------");
 		System.out.println();
-		System.out.println(company.getEmployeeById(1) + "\n");
+//		Map<String, String> params = new HashMap<String, String>();
+//		params.put("id", "1");
+		System.out.println(restTemplate.getForEntity("http://localhost:8080/company/getOneEmp/1", Employee.class));
+//		System.out.println(company.getEmployeeById(1) + "\n");
 		System.out.println("-------------------------Get Employees By Name(Tal Levin)---------------------------");
 		System.out.println();
-		System.out.println(company.getEmployeesByName("Tal Levin") + "\n");
+		System.out.println(restTemplate.getForEntity("http://localhost:8080/company/getEmp/Tal Levin", List.class));
+//		System.out.println(company.getEmployeesByName("Tal Levin") + "\n");
 		System.out.println("-------------------------Get All Employees---------------------------");
 		System.out.println();
-		System.out.println(company.getAllEmployees() + "\n");
-		System.out.println("-------------------------Get All Jobs---------------------------");
-		System.out.println();
-		System.out.println(company.getAllJobs() + "\n");
-		System.out.println("-------------------------Get Jobs By End Date(2020-12-26)---------------------------");
-		System.out.println();
-		System.out.println(company.getJobsByEndDate(Date.valueOf("2020-12-26")) + "\n");
-		System.out.println("-------------------------Get Jobs Between Dates(2020-12-28 : 2021-03-28)---------------------------");
-		System.out.println();
-		System.out.println(company.getJobsBetweenEndDates(Date.valueOf("2020-12-28"), Date.valueOf("2021-03-28")));
+		System.out.println(restTemplate.getForEntity("http://localhost:8080/company/getEmp", List.class));
+//		System.out.println(company.getAllEmployees() + "\n");
+//		System.out.println("-------------------------Get All Jobs---------------------------");
+//		System.out.println();
+//		System.out.println(company.getAllJobs() + "\n");
+//		System.out.println("-------------------------Get Jobs By End Date(2020-12-26)---------------------------");
+//		System.out.println();
+//		System.out.println(company.getJobsByEndDate(Date.valueOf("2020-12-26")) + "\n");
+//		System.out.println("-------------------------Get Jobs Between Dates(2020-12-28 : 2021-03-28)---------------------------");
+//		System.out.println();
+//		System.out.println(company.getJobsBetweenEndDates(Date.valueOf("2020-12-28"), Date.valueOf("2021-03-28")));
 	}
 
 }

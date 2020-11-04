@@ -12,8 +12,11 @@ import com.app.task.bean.Job;
 import com.app.task.repo.EmployeeRepo;
 import com.app.task.repo.JobRepo;
 
+import lombok.Data;
+
 @Service
 @Lazy
+@Data
 public class CompanyService {
 	
 	@Autowired
