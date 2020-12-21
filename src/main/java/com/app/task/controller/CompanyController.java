@@ -3,6 +3,8 @@ package com.app.task.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.app.task.bean.Employee;
-import com.app.task.repo.EmployeeRepo;
+import com.app.task.bean.EmployeeList;
 import com.app.task.service.CompanyService;
 
 @RestController
@@ -22,23 +24,26 @@ public class CompanyController {
 	private CompanyService companyService;
 	
 	@PostMapping("/addEmp")
-	public long addEmployee(@RequestBody Employee employee) {
-		this.companyService.addEmployee(employee);
-		return this.companyService.getEmployeeRepo().findByNameAndSalary(employee.getName(), employee.getSalary()).getId();
+	public ResponseEntity<?> addEmployee(@RequestBody Employee employee) {
+		return new ResponseEntity<Long>(this.companyService.addEmployee(employee), HttpStatus.CREATED);
 	}
 	
 	@GetMapping("/getOneEmp/{id}")
-	public Employee getEmployee(@PathVariable int id) {
-		return this.companyService.getEmployeeById(id);
+	public ResponseEntity<?> getEmployee(@PathVariable Long id) {
+		return new ResponseEntity<Employee>(this.companyService.getEmployeeById(id), HttpStatus.OK) ;
 	}
 	
 	@GetMapping("/getEmp")
-	public List<Employee> getEmployees() {
-		return this.companyService.getAllEmployees();
+	public ResponseEntity<?> getEmployees() {
+		List<Employee> employees = this.companyService.getAllEmployees();
+		EmployeeList employeeList = new EmployeeList(employees);
+		return new ResponseEntity<EmployeeList>(employeeList, HttpStatus.OK) ;
 	}
 	
 	@GetMapping("/getEmp/{name}")
-	public List<Employee> getEmployees(@PathVariable String name) {
-		return this.companyService.getEmployeesByName(name);
+	public ResponseEntity<?> getEmployees(@PathVariable String name) {
+		List<Employee> employees = this.companyService.getEmployeesByName(name);
+		EmployeeList employeeList = new EmployeeList(employees);
+		return new ResponseEntity<EmployeeList>(employeeList, HttpStatus.OK) ;
 	}
 }

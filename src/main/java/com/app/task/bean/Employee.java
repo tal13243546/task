@@ -20,7 +20,7 @@ import lombok.NoArgsConstructor;
 public class Employee {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
+	private Long id;
 	private String name;
 	private double salary;
 	@OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)

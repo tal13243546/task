@@ -24,12 +24,13 @@ public class CompanyService {
 	@Autowired
 	private JobRepo jobRepo;
 
-	public void addEmployee(Employee employee) {
-		employeeRepo.save(employee);
+	public Long addEmployee(Employee employee) {
+		Employee e1 = employeeRepo.save(employee);
+		return e1.getId();
 	}
 
-	public Employee getEmployeeById(int id) {
-		return employeeRepo.getOne(id);
+	public Employee getEmployeeById(Long id) {
+		return employeeRepo.findById(id);
 	}
 
 	public List<Employee> getEmployeesByName(String name) {

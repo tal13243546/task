@@ -24,7 +24,7 @@ public class Test implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		ArtUtils.myTest();
-		
+		String URL = "http://localhost:8080/company/";
 		Employee e1 = new Employee("Tal Levin", 19000.0);
 		Job j1 = new Job("Get 100 in the Task", Date.valueOf("2020-10-26"));
 		Job j2 = new Job("Finish JB Course", Date.valueOf("2020-12-26"));
@@ -36,28 +36,25 @@ public class Test implements CommandLineRunner{
 		Job j4 = new Job("Finish semaster One", Date.valueOf("2021-03-26"));
 		e2.getJobs().add(j3);
 		e2.getJobs().add(j4);
-		
 		System.out.println("-------------------------Add Employee---------------------------");
-		System.out.println(restTemplate.postForEntity("http://localhost:8080/company/addEmp", e1, Long.class));
-		System.out.println(restTemplate.postForEntity("http://localhost:8080/company/addEmp", e2, Long.class));
+		System.out.println("Employee:" + restTemplate.postForEntity(URL + "addEmp", e1, Long.class).getBody());
+		System.out.println("Employee:" + restTemplate.postForEntity(URL + "addEmp", e2, Long.class).getBody());
 //		company.addEmployee(e1);
 //		company.addEmployee(e2);
 		System.out.println();
-		System.out.println(restTemplate.getForObject("http://localhost:8080/company/getEmp", List.class));
+		System.out.println(restTemplate.getForObject(URL + "getEmp", EmployeeList.class).getEmployees());
 //		System.out.println(company.getAllEmployees() + "\n");
 		System.out.println("-------------------------Get Employee By ID(1)---------------------------");
 		System.out.println();
-//		Map<String, String> params = new HashMap<String, String>();
-//		params.put("id", "1");
-		System.out.println(restTemplate.getForEntity("http://localhost:8080/company/getOneEmp/1", Employee.class));
+		System.out.println(restTemplate.getForObject(URL + "getOneEmp/1", Employee.class));
 //		System.out.println(company.getEmployeeById(1) + "\n");
 		System.out.println("-------------------------Get Employees By Name(Tal Levin)---------------------------");
 		System.out.println();
-		System.out.println(restTemplate.getForEntity("http://localhost:8080/company/getEmp/Tal Levin", List.class));
+		System.out.println(restTemplate.getForObject(URL + "getEmp/Tal Levin", EmployeeList.class).getEmployees());
 //		System.out.println(company.getEmployeesByName("Tal Levin") + "\n");
 		System.out.println("-------------------------Get All Employees---------------------------");
 		System.out.println();
-		System.out.println(restTemplate.getForEntity("http://localhost:8080/company/getEmp", List.class));
+		System.out.println(restTemplate.getForObject(URL + "getEmp", EmployeeList.class).getEmployees());
 //		System.out.println(company.getAllEmployees() + "\n");
 //		System.out.println("-------------------------Get All Jobs---------------------------");
 //		System.out.println();
